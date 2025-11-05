@@ -1,0 +1,8 @@
+[
+  {"id":"cg_1001","confidence":0.93,"status":"rejected","title":"ACME / CRM↔Gov","summary":{"sources":["CRM","Gov"],"vat":"US987654321","registry":"12345678"}},
+  {"id":"cg_1002","confidence":0.88,"status":"rejected","title":"BlueOcean / ERP↔Finance","summary":{"sources":["ERP","Finance"],"vat":"EE100000111"}},
+  {"id":"cg_1003","confidence":0.79,"status":"needs_review","title":"Nordic Foods / Support↔Gov","summary":{"sources":["Support","Gov"],"registry":"99887766"}},
+  {"id":"cg_1004","confidence":0.96,"status":"suggested","title":"Strathmore / CRM↔Finance↔Gov","summary":{"sources":["CRM","Finance","Gov"],"vat":"EE100000001"}},
+  {"id":"cg_1005","confidence":0.72,"status":"needs_review","title":"Sunrise Ltd / CRM↔ERP","summary":{"sources":["CRM","ERP"]}}
+]
+
