@@ -6,16 +6,32 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
-import { type MatchPair } from '../mockData';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { useMatches } from '../contexts/MatchContext';
+import { toast } from './ui/sonner';
+import type { ReviewedItem } from '../src/types/hitl';
 
 export function MatchManagement() {
-  const { reviewedMatches, undoReview } = useMatches();
+  const { reviewed, candidates, filters, setFilters, undo } = useMatches();
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [confidenceFilter, setConfidenceFilter] = useState<'high' | 'low' | null>(null);
   const [dateFilter, setDateFilter] = useState<'week' | 'month' | null>(null);
+  const [pickRegistryDialogOpen, setPickRegistryDialogOpen] = useState(false);
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+
+  // Get full candidate group data for each reviewed item
+  const enrichedReviewed = useMemo(() => {
+    return reviewed.map(item => {
+      const candidate = candidates.find(c => c.id === item.id);
+      return {
+        ...item,
+        records: candidate?.records || [item.finalRecord],
+        band: item.confidence > 0.9 ? 'veryHigh' as const : item.confidence > 0.8 ? 'high' as const : 'other' as const,
+      };
+    });
+  }, [reviewed, candidates]);
 
   const toggleRow = (id: string) => {
     const newExpanded = new Set(expandedRows);
@@ -50,60 +66,65 @@ export function MatchManagement() {
     });
   };
 
-  // Filter matches based on search, status, confidence, and date
+  // Client-side filtering
   const filteredMatches = useMemo(() => {
-    let matches: MatchPair[] = [...reviewedMatches];
+    let filtered = [...enrichedReviewed];
 
-    // Filter by status tab
-    if (activeTab !== 'all') {
-      matches = matches.filter(match => match.status === activeTab);
+    // Status filter (tabs)
+    if (activeTab === 'confirmed' || activeTab === 'accepted') {
+      filtered = filtered.filter(item => item.status === 'confirmed');
+    } else if (activeTab === 'rejected') {
+      filtered = filtered.filter(item => item.status === 'rejected');
+    } else if (activeTab === 'needs_review') {
+      filtered = filtered.filter(item => item.status === 'needs_review');
     }
 
-    // Filter by search query
+    // Confidence filter
+    if (confidenceFilter === 'high') {
+      filtered = filtered.filter(item => item.confidence > 0.9);
+    } else if (confidenceFilter === 'low') {
+      filtered = filtered.filter(item => item.confidence < 0.8);
+    }
+
+    // Date filter
+    if (dateFilter === 'week') {
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      filtered = filtered.filter(item => new Date(item.reviewedAt) >= weekAgo);
+    } else if (dateFilter === 'month') {
+      const monthAgo = new Date();
+      monthAgo.setDate(monthAgo.getDate() - 30);
+      filtered = filtered.filter(item => new Date(item.reviewedAt) >= monthAgo);
+    }
+
+    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      matches = matches.filter(match => {
-        const nameMatch = match.records.some(r => r.name.toLowerCase().includes(query));
-        const vatMatch = match.records.some(r => r.vat.toLowerCase().includes(query));
-        const reviewerMatch = match.reviewer?.toLowerCase().includes(query) || false;
-        return nameMatch || vatMatch || reviewerMatch;
+      filtered = filtered.filter(item => {
+        const finalFields = item.finalRecord.fields;
+        return (
+          finalFields.name?.toLowerCase().includes(query) ||
+          finalFields.vat?.toLowerCase().includes(query) ||
+          finalFields.country?.toLowerCase().includes(query) ||
+          item.reviewer?.toLowerCase().includes(query) ||
+          item.finalRecord.source.toLowerCase().includes(query)
+        );
       });
     }
 
-    // Filter by confidence
-    if (confidenceFilter === 'high') {
-      matches = matches.filter(match => match.confidence > 0.9);
-    } else if (confidenceFilter === 'low') {
-      matches = matches.filter(match => match.confidence < 0.8);
-    }
+    return filtered;
+  }, [enrichedReviewed, activeTab, confidenceFilter, dateFilter, searchQuery]);
 
-    // Filter by date
-    if (dateFilter) {
-      const now = new Date();
-      const filterDate = new Date();
-      if (dateFilter === 'week') {
-        filterDate.setDate(now.getDate() - 7);
-      } else if (dateFilter === 'month') {
-        filterDate.setDate(now.getDate() - 30);
-      }
-      matches = matches.filter(match => {
-        if (!match.reviewedAt) return false;
-        const reviewedDate = new Date(match.reviewedAt);
-        return reviewedDate >= filterDate;
-      });
-    }
-
-    return matches;
-  }, [activeTab, searchQuery, confidenceFilter, dateFilter]);
-
-  const renderMatchList = (matches: MatchPair[]) => {
-    if (matches.length === 0) {
+  const renderMatchList = (matches: typeof filteredMatches) => {
+    if (!matches || matches.length === 0) {
       return (
         <Card className="p-12 text-center backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-white/20">
           <div className="text-gray-400 text-5xl mb-4">🔍</div>
           <h3 className="text-gray-900 dark:text-white mb-2">No matches found</h3>
           <p className="text-gray-600 dark:text-gray-400">
-            Try adjusting your search or filter criteria
+            {reviewed.length === 0 
+              ? "No reviewed matches available yet. Start reviewing matches in the Review page."
+              : "Try adjusting your search or filter criteria"}
           </p>
         </Card>
       );
@@ -133,25 +154,37 @@ export function MatchManagement() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-gray-900 dark:text-white">
-                        {match.records[0].name}
+                        {match.finalRecord.fields.name || match.id || 'Unknown'}
                       </h3>
                       <Badge className={`${getStatusColor(match.status)} text-white`}>
                         {match.status === 'confirmed' ? 'Confirmed' : match.status === 'rejected' ? 'Rejected' : 'Needs Review'}
                       </Badge>
                       <Badge variant="outline">
-                        Confidence: {Math.round(match.confidence * 100)}%
+                        Confidence: {Math.round((match.confidence || 0) * 100)}%
                       </Badge>
                     </div>
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                      {/* Final Record Display */}
+                      <Badge className="bg-blue-600 text-white">Final record</Badge>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {match.finalRecord.fields.name || 'Unknown'}
+                      </span>
+                      {match.finalRecord.fields.registry_code && (
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          #{match.finalRecord.fields.registry_code}
+                        </span>
+                      )}
+                    </div>
                     <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                      <span>VAT: {match.records[0].vat}</span>
+                      <span>VAT: {match.finalRecord.fields.vat || 'N/A'}</span>
                       <span>•</span>
-                      <span>{match.records[0].country}</span>
+                      <span>{match.finalRecord.fields.country || 'N/A'}</span>
                       <span>•</span>
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className="cursor-help underline decoration-dotted">
-                              {match.reviewer} • {match.reviewedAt && formatDateTime(match.reviewedAt)}
+                              {match.reviewer || 'Unknown'} • {formatDateTime(match.reviewedAt)}
                             </span>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -160,26 +193,14 @@ export function MatchManagement() {
                                 <strong>Audit Trail:</strong>
                               </p>
                               <p>
-                                {match.reviewer} {match.status === 'rejected' ? 'rejected' : 'confirmed'} this match
+                                {match.reviewer} {match.status === 'rejected' ? 'rejected' : match.status === 'confirmed' ? 'confirmed' : 'marked as needs review'} this match
                               </p>
-                              <p>at {match.reviewedAt && formatDateTime(match.reviewedAt)}</p>
-                              {match.rejectionReason && (
-                                <p className="mt-1 text-red-400">
-                                  Reason: {match.rejectionReason}
-                                </p>
-                              )}
+                              <p>at {formatDateTime(match.reviewedAt)}</p>
                             </div>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
                     </div>
-                    {match.rejectionReason && (
-                      <div className="mt-2">
-                        <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                          Reason: {match.rejectionReason}
-                        </Badge>
-                      </div>
-                    )}
                   </div>
                 </div>
 
@@ -187,7 +208,10 @@ export function MatchManagement() {
                   variant="outline" 
                   size="sm" 
                   className="gap-2"
-                  onClick={() => undoReview(match.id)}
+                  onClick={() => {
+                    undo(match.id);
+                    toast.success(`Undo applied to ${match.id}`);
+                  }}
                 >
                   <Undo2 className="w-4 h-4" />
                   Undo
@@ -201,68 +225,53 @@ export function MatchManagement() {
                 <h4 className="text-sm text-gray-900 dark:text-white mb-4">
                   Record Details from All Sources
                 </h4>
-                <div className="grid grid-cols-5 gap-4">
-                  {match.records.map((record, idx) => (
-                    <div
-                      key={idx}
-                      className="p-4 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
-                    >
-                      <Badge className="mb-3 bg-blue-500 text-white">{record.source}</Badge>
-                      <div className="space-y-2 text-sm">
-                        <div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">Name</div>
-                          <div className="text-gray-900 dark:text-white">{record.name}</div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">VAT</div>
-                          <div className="text-gray-900 dark:text-white">{record.vat}</div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">Address</div>
-                          <div className="text-gray-900 dark:text-white">{record.address}</div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">Phone</div>
-                          <div className="text-gray-900 dark:text-white">{record.phone}</div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">Email</div>
-                          <div className="text-gray-900 dark:text-white break-all">{record.email}</div>
+                            <div className="grid grid-cols-5 gap-4">
+                              {(match.records || []).map((record, idx) => {
+                                const recordSource = record.source === 'registry' ? 'Registry' : record.source.toUpperCase();
+                                const isRegistry = record.source === 'registry';
+                    return (
+                      <div
+                        key={idx}
+                        className={`p-4 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 ${isRegistry ? 'registry-glow' : ''}`}
+                      >
+                        <Badge className="mb-3 bg-blue-500 text-white">{recordSource}</Badge>
+                        <div className="space-y-2 text-sm">
+                          <div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Name</div>
+                            <div className="text-gray-900 dark:text-white">{record.fields.name || '(not provided)'}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">VAT</div>
+                            <div className="text-gray-900 dark:text-white">{record.fields.vat || '(not provided)'}</div>
+                          </div>
+                          {record.fields.registry_code && (
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">Registry Code</div>
+                              <div className="text-gray-900 dark:text-white font-semibold">{record.fields.registry_code}</div>
+                            </div>
+                          )}
+                          <div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Address</div>
+                            <div className="text-gray-900 dark:text-white">{record.fields.address || '(not provided)'}</div>
+                          </div>
+                          {record.fields.phone && (
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">Phone</div>
+                              <div className="text-gray-900 dark:text-white">{record.fields.phone}</div>
+                            </div>
+                          )}
+                          {record.fields.email && (
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">Email</div>
+                              <div className="text-gray-900 dark:text-white break-all">{record.fields.email}</div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
-                <div className="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-                  <h5 className="text-sm text-gray-900 dark:text-white mb-2">AI Explanation</h5>
-                  <div className="grid grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Name Similarity</div>
-                      <div className="text-gray-900 dark:text-white">
-                        {Math.round(match.aiExplanation.nameSimilarity * 100)}%
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">VAT Match</div>
-                      <div className="text-gray-900 dark:text-white">
-                        {match.aiExplanation.vatMatch ? '✓ Exact' : '✗ No Match'}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Address Similarity</div>
-                      <div className="text-gray-900 dark:text-white">
-                        {Math.round(match.aiExplanation.addressSimilarity * 100)}%
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Overall Score</div>
-                      <div className="text-gray-900 dark:text-white">
-                        {Math.round(match.aiExplanation.overallScore * 100)}%
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
           </Card>
@@ -283,22 +292,46 @@ export function MatchManagement() {
 
         {/* Search and Filters */}
         <Card className="mb-6 p-6 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-white/20 shadow-xl">
-          <div className="flex items-center gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by company name, VAT, reviewer..."
-                className="pl-10"
-              />
+            <div className="flex items-center gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by company name, VAT, registry code, country, reviewer..."
+                  className="pl-10"
+                />
+              </div>
+              <Button variant="outline" className="gap-2">
+                <Filter className="w-4 h-4" />
+                Filters
+              </Button>
             </div>
-            <Button variant="outline" className="gap-2">
-              <Filter className="w-4 h-4" />
-              Filters
-            </Button>
-          </div>
 
+          <div className="flex items-center gap-3 mt-4 text-sm text-gray-600 dark:text-gray-400 flex-wrap">
+            {confidenceFilter && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setConfidenceFilter(null)}
+                className="gap-2"
+              >
+                <X className="w-3 h-3" />
+                {confidenceFilter === 'high' ? 'High Confidence' : 'Low Confidence'}
+              </Button>
+            )}
+            {dateFilter && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDateFilter(null)}
+                className="gap-2"
+              >
+                <X className="w-3 h-3" />
+                {dateFilter === 'week' ? 'This Week' : 'Last 30 Days'}
+              </Button>
+            )}
+          </div>
           <div className="flex items-center gap-3 mt-4 text-sm text-gray-600 dark:text-gray-400 flex-wrap">
             <span>Quick filters:</span>
             <Button 
@@ -383,6 +416,34 @@ export function MatchManagement() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Pick from Registry Dialog */}
+      <Dialog open={pickRegistryDialogOpen} onOpenChange={setPickRegistryDialogOpen}>
+        <DialogContent className="backdrop-blur-xl bg-white/95 dark:bg-gray-900/95">
+          <DialogHeader>
+            <DialogTitle>Pick from Registry</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-gray-700 dark:text-gray-300">
+              In a full implementation, this would open a registry search interface to select the final record for this entity group.
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              This is a prototype limitation. Registry selection would typically:
+            </p>
+            <ul className="list-disc pl-5 text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <li>Search official business registries</li>
+              <li>Match by VAT number, registry code, or company name</li>
+              <li>Display registry records with verified information</li>
+              <li>Allow selection of the final "source of truth" record</li>
+            </ul>
+            <div className="mt-4 flex justify-end gap-2">
+              <Button onClick={() => setPickRegistryDialogOpen(false)} variant="outline">
+                Close
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

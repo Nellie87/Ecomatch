@@ -1,17 +1,16 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, Users, BarChart3, FolderKanban, Brain } from 'lucide-react';
 
-interface NavigationProps {
-  currentView: string;
-  setCurrentView: (view: string) => void;
-}
+export function Navigation() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export function Navigation({ currentView, setCurrentView }: NavigationProps) {
   const navItems = [
-    { id: 'admin', label: 'Admin', icon: Home },
-    { id: 'reviewer', label: 'Review', icon: Users },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'management', label: 'Management', icon: FolderKanban },
+    { id: 'admin', path: '/admin', label: 'Admin', icon: Home },
+    { id: 'review', path: '/review', label: 'Review', icon: Users },
+    { id: 'analytics', path: '/analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'management', path: '/management', label: 'Management', icon: FolderKanban },
   ];
 
   return (
@@ -31,11 +30,11 @@ export function Navigation({ currentView, setCurrentView }: NavigationProps) {
           <div className="flex items-center gap-2">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = currentView === item.id;
+              const isActive = location.pathname === item.path;
               return (
                 <button
                   key={item.id}
-                  onClick={() => setCurrentView(item.id)}
+                  onClick={() => navigate(item.path)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                     isActive
                       ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'

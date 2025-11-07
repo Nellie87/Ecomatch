@@ -192,3 +192,54 @@
 html {
   font-size: var(--font-size);
 }
+
+/* Registry glow animation */
+.registry-glow {
+  position: relative;
+  box-shadow: 0 0 0 4px rgba(30,144,255,0.10), 0 8px 24px rgba(30,144,255,0.25);
+  animation: ringPulse 3s ease-in-out infinite;
+  border-radius: 16px;
+}
+
+@keyframes ringPulse {
+  0% { box-shadow: 0 0 0 4px rgba(30,144,255,0.10), 0 8px 24px rgba(30,144,255,0.25); }
+  50% { box-shadow: 0 0 0 8px rgba(115,184,255,0.20), 0 12px 28px rgba(30,144,255,0.35); }
+  100% { box-shadow: 0 0 0 4px rgba(30,144,255,0.10), 0 8px 24px rgba(30,144,255,0.25); }
+}
+
+/* EchoMatch Splash Screen Animations */
+@keyframes pulseBirth {
+  0% { transform: scale(0.6); opacity: 0.0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes expand {
+  0% { transform: scale(1); }
+  100% { transform: scale(2.2); }
+}
+
+@keyframes ripple {
+  0%, 100% { box-shadow: 0 0 120px 60px rgba(30,144,255,0.28), 0 0 220px 120px rgba(115,184,255,0.22); }
+  50% { box-shadow: 0 0 160px 80px rgba(30,144,255,0.22), 0 0 280px 160px rgba(115,184,255,0.18); }
+}
+
+@keyframes dissolve {
+  0% { opacity: 1; filter: blur(0.2px); }
+  100% { opacity: 0; filter: blur(8px); }
+}
+
+.animate-pulseBirth {
+  animation: pulseBirth 1.5s ease-in forwards;
+}
+
+.animate-expand {
+  animation: expand 2.5s ease-in-out forwards;
+}
+
+.animate-ripple {
+  animation: ripple 2.2s ease-in-out infinite;
+}
+
+.animate-dissolve {
+  animation: dissolve 2s ease-in forwards;
+}

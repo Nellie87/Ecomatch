@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { X, CheckCircle2, XCircle } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
-import { type MatchPair } from '../mockData';
+import type { CandidateGroup } from '../src/types/hitl';
 
 interface ExplainableAIPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  matchData: MatchPair;
+  matchData: CandidateGroup | null | undefined;
 }
 
 export function ExplainableAIPanel({ isOpen, onClose, matchData }: ExplainableAIPanelProps) {
-  if (!isOpen) return null;
+  if (!isOpen || !matchData) return null;
 
-  const { aiExplanation } = matchData;
+  // Derive explanation metrics from CandidateGroup data
+  const aiExplanation = useMemo(() => {
+    // Check VAT match
+    const vats = matchData.records.map(r => r.fields.vat).filter(Boolean);
+    const vatMatch = vats.length > 0 && new Set(vats).size === 1;
+
+    // Extract similarity scores from reasons
+    const nameReason = matchData.reasons.find(r => r.field === 'name');
+    const addressReason = matchData.reasons.find(r => r.field === 'address');
+    const vatReason = matchData.reasons.find(r => r.field === 'vat');
+    
+    // Estimate similarities from reasons (convert scores to 0-1 range)
+    // If we have a reason with a score, use it; otherwise estimate from confidence
+    const nameSimilarity = nameReason ? Math.max(0, Math.min(1, nameReason.score + 0.5)) : matchData.confidence * 0.9;
+    const addressSimilarity = addressReason ? Math.max(0, Math.min(1, addressReason.score + 0.5)) : matchData.confidence * 0.85;
+    const phoneSimilarity = matchData.confidence * 0.9; // Estimate
+    const overallScore = matchData.confidence;
+
+    return {
+      overallScore,
+      nameSimilarity,
+      vatMatch,
+      addressSimilarity,
+      phoneSimilarity,
+    };
+  }, [matchData]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-end">

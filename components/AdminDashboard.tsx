@@ -1,7 +1,8 @@
 import React from 'react';
-import { Users, CheckCircle, XCircle, Clock, TrendingUp, Activity } from 'lucide-react';
+import { Users, CheckCircle, XCircle, Clock, TrendingUp, Activity, ArrowRight } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import {
   PieChart,
   Pie,
@@ -17,7 +18,11 @@ import {
 } from 'recharts';
 import { performanceMetrics, reviewerLeaderboard } from '../mockData';
 
-export function AdminDashboard() {
+interface AdminDashboardProps {
+  setCurrentView?: (view: string) => void;
+}
+
+export function AdminDashboard({ setCurrentView }: AdminDashboardProps) {
   const statusData = [
     { name: 'Confirmed', value: performanceMetrics.confirmed, color: '#10b981' },
     { name: 'Rejected', value: performanceMetrics.rejected, color: '#ef4444' },
@@ -42,30 +47,74 @@ export function AdminDashboard() {
 
         {/* Top Summary Cards */}
         <div className="grid grid-cols-4 gap-6 mb-8">
-          <Card className="p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <Card 
+            className="p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+            onClick={() => setCurrentView?.('reviewer')}
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-white/20">
                 <Activity className="w-6 h-6" />
               </div>
+              {setCurrentView && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-white hover:bg-white/20"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentView('reviewer');
+                  }}
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              )}
             </div>
             <div className="text-4xl mb-1">{performanceMetrics.totalReviewed}</div>
             <p className="text-sm text-blue-100">Total Reviewed</p>
             <div className="mt-3 text-xs text-blue-100">
               of {performanceMetrics.totalRecords} records
             </div>
+            {setCurrentView && (
+              <div className="mt-4 pt-3 border-t border-white/20">
+                <p className="text-xs text-blue-100">Click to start reviewing</p>
+              </div>
+            )}
           </Card>
 
-          <Card className="p-6 backdrop-blur-xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <Card 
+            className="p-6 backdrop-blur-xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+            onClick={() => setCurrentView?.('management')}
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-white/20">
                 <CheckCircle className="w-6 h-6" />
               </div>
-              <Badge className="bg-white/20 text-white">
-                {Math.round((performanceMetrics.confirmed / performanceMetrics.totalReviewed) * 100)}%
-              </Badge>
+              <div className="flex items-center gap-2">
+                <Badge className="bg-white/20 text-white">
+                  {Math.round((performanceMetrics.confirmed / performanceMetrics.totalReviewed) * 100)}%
+                </Badge>
+                {setCurrentView && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white hover:bg-white/20"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentView('management');
+                    }}
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
             </div>
             <div className="text-4xl mb-1">{performanceMetrics.confirmed}</div>
             <p className="text-sm text-green-100">Confirmed Matches</p>
+            {setCurrentView && (
+              <div className="mt-4 pt-3 border-t border-white/20">
+                <p className="text-xs text-green-100">Click to manage matches</p>
+              </div>
+            )}
           </Card>
 
           <Card className="p-6 backdrop-blur-xl bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
@@ -232,9 +281,20 @@ export function AdminDashboard() {
                 Team performance and activity
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               <span className="text-gray-900 dark:text-white">{reviewerLeaderboard.length} Active Reviewers</span>
+              {setCurrentView && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentView('reviewer')}
+                  className="ml-2"
+                >
+                  Start Reviewing
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              )}
             </div>
           </div>
 

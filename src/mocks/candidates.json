@@ -1,0 +1,561 @@
+[
+  {
+    "id": "cg_0001",
+    "band": "high",
+    "confidence": 0.91,
+    "reasons": [
+      { "text": "Registry code exact (strong)", "score": 0.70, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact (strong)", "score": 0.20, "strength": "strong", "field": "vat" },
+      { "text": "Name JW=0.93 (high)", "score": 0.08, "strength": "moderate", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-88", "source": "crm", "fields": { "name": "Trinidad Ltd", "vat": "GB123456789", "address": "123 Oxford Street, London", "country": "United Kingdom", "email": "contact@trinidadltd.com", "phone": "+44 20 7946 0958" } },
+      { "id": "erp-301", "source": "erp", "fields": { "name": "Trinidad Limited", "vat": "GB123456789", "address": "123 Oxford St, London, UK", "country": "United Kingdom", "email": "info@trinidadltd.co.uk", "phone": "+44 20 7946 0958" } },
+      { "id": "fin-12", "source": "finance", "fields": { "name": "Trinidad Ltd.", "vat": "GB123456789", "address": "123 Oxford Street, London W1", "country": "United Kingdom", "email": "accounts@trinidadltd.com", "phone": "+442079460958" } },
+      { "id": "sup-99", "source": "support", "fields": { "name": "Trinidad", "vat": "GB123456789", "address": "123 Oxford Street", "country": "UK", "email": "support@trinidadltd.com", "phone": "+44 20 7946 0958" } },
+      { "id": "rik-12345678", "source": "registry", "fields": { "name": "Trinidad Limited", "registry_code": "12345678", "vat": "GB123456789", "address": "123 Oxford Street, London, W1D 2HX", "country": "United Kingdom", "email": "legal@trinidadltd.com" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-03T09:00:00Z"
+  },
+  {
+    "id": "cg_0002",
+    "band": "other",
+    "confidence": 0.76,
+    "reasons": [{ "text": "VAT mismatch", "score": -0.2, "strength": "strong", "field": "vat" }],
+    "records": [
+      { "id": "crm-90", "source": "crm", "fields": { "name": "Trinidad Ltd", "vat": "ES998888777", "address": "C/ Gran Via 10, Madrid", "country": "Spain", "email": "contact@trin.es" } },
+      { "id": "rik-ES-888777", "source": "registry", "fields": { "name": "Trinidad Ltd", "registry_code": "ES-888777", "vat": "ES998888777", "address": "Calle Gran Via 10, Madrid", "country": "Spain" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Sarah Johnson",
+    "reviewed_at": "2025-11-04T14:20:00Z",
+    "created_at": "2025-11-03T10:00:00Z"
+  },
+  {
+    "id": "cg_0003",
+    "band": "veryHigh",
+    "confidence": 0.95,
+    "reasons": [
+      { "text": "Registry code exact match", "score": 0.75, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.15, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.98", "score": 0.05, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-101", "source": "crm", "fields": { "name": "Acme Corporation", "vat": "US987654321", "address": "456 Silicon Valley Blvd, San Francisco, CA", "country": "United States", "email": "hello@acmecorp.com", "phone": "+1 415 555 0123" } },
+      { "id": "erp-202", "source": "erp", "fields": { "name": "Acme Corporation Inc", "vat": "US987654321", "address": "456 Silicon Valley Blvd, San Francisco", "country": "USA", "email": "contact@acmecorp.com", "phone": "+1 415 555 0123" } },
+      { "id": "fin-303", "source": "finance", "fields": { "name": "ACME Corp", "vat": "US987654321", "address": "456 SV Blvd, SF, CA", "country": "US", "email": "billing@acme.com", "phone": "+14155550123" } },
+      { "id": "sup-404", "source": "support", "fields": { "name": "Acme Inc", "vat": "US987654321", "address": "456 Silicon Valley Blvd", "country": "United States", "email": "help@acmecorp.com", "phone": "+1 415 555 0123" } },
+      { "id": "rik-US-987654", "source": "registry", "fields": { "name": "Acme Corporation Incorporated", "registry_code": "US-987654", "vat": "US987654321", "address": "456 Silicon Valley Boulevard, San Francisco, CA 94105", "country": "United States", "email": "admin@acmecorp.com" } }
+    ],
+    "status": "confirmed",
+    "reviewer": "Mike Chen",
+    "reviewed_at": "2025-11-05T11:15:00Z",
+    "created_at": "2025-11-02T08:30:00Z"
+  },
+  {
+    "id": "cg_0004",
+    "band": "high",
+    "confidence": 0.88,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.60, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.85", "score": 0.25, "strength": "moderate", "field": "name" },
+      { "text": "Address partial match", "score": 0.03, "strength": "weak", "field": "address" }
+    ],
+    "records": [
+      { "id": "crm-105", "source": "crm", "fields": { "name": "BlueOcean Industries", "vat": "EE100000111", "address": "Tartu mnt 15, Tallinn", "country": "Estonia", "email": "info@blueocean.ee", "phone": "+372 600 1234" } },
+      { "id": "erp-206", "source": "erp", "fields": { "name": "BlueOcean Ltd", "vat": "EE100000111", "address": "Tartu mnt 15, Tallinn", "country": "Estonia", "email": "sales@blueocean.ee", "phone": "+3726001234" } },
+      { "id": "fin-307", "source": "finance", "fields": { "name": "BlueOcean", "vat": "EE100000111", "address": "Tartu mnt 15", "country": "Estonia", "email": "finance@blueocean.ee" } },
+      { "id": "sup-408", "source": "support", "fields": { "name": "BlueOcean Industries", "vat": "EE100000111", "country": "Estonia", "email": "support@blueocean.ee" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Emma Wilson",
+    "reviewed_at": "2025-11-06T09:45:00Z",
+    "created_at": "2025-11-04T12:00:00Z"
+  },
+  {
+    "id": "cg_0005",
+    "band": "high",
+    "confidence": 0.89,
+    "reasons": [
+      { "text": "Registry code exact", "score": 0.65, "strength": "strong", "field": "registry_code" },
+      { "text": "Name similarity 0.92", "score": 0.20, "strength": "moderate", "field": "name" },
+      { "text": "Country match", "score": 0.04, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-110", "source": "crm", "fields": { "name": "Nordic Foods AB", "vat": "SE5567890123", "address": "Drottninggatan 45, Stockholm", "country": "Sweden", "email": "info@nordicfoods.se", "phone": "+46 8 123 4567" } },
+      { "id": "erp-211", "source": "erp", "fields": { "name": "Nordic Foods", "vat": "SE5567890123", "address": "Drottninggatan 45", "country": "Sweden", "email": "orders@nordicfoods.se" } },
+      { "id": "sup-412", "source": "support", "fields": { "name": "Nordic Foods AB", "country": "Sweden", "email": "help@nordicfoods.se" } },
+      { "id": "rik-SE-99887766", "source": "registry", "fields": { "name": "Nordic Foods Aktiebolag", "registry_code": "99887766", "vat": "SE5567890123", "address": "Drottninggatan 45, 111 51 Stockholm", "country": "Sweden", "email": "legal@nordicfoods.se" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-05T14:30:00Z"
+  },
+  {
+    "id": "cg_0006",
+    "band": "veryHigh",
+    "confidence": 0.96,
+    "reasons": [
+      { "text": "Registry code exact match", "score": 0.80, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.12, "strength": "strong", "field": "vat" },
+      { "text": "Name exact match", "score": 0.04, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-115", "source": "crm", "fields": { "name": "Strathmore Group", "vat": "EE100000001", "address": "Pärnu mnt 142, Tallinn", "country": "Estonia", "email": "contact@strathmore.ee", "phone": "+372 620 5555" } },
+      { "id": "erp-216", "source": "erp", "fields": { "name": "Strathmore Group OÜ", "vat": "EE100000001", "address": "Pärnu mnt 142", "country": "Estonia", "email": "info@strathmore.ee" } },
+      { "id": "fin-317", "source": "finance", "fields": { "name": "Strathmore", "vat": "EE100000001", "country": "Estonia", "email": "finance@strathmore.ee" } },
+      { "id": "rik-EE-100001", "source": "registry", "fields": { "name": "Strathmore Group OÜ", "registry_code": "EE-100001", "vat": "EE100000001", "address": "Pärnu mnt 142, 11314 Tallinn", "country": "Estonia", "email": "legal@strathmore.ee" } }
+    ],
+    "status": "suggested",
+    "created_at": "2025-11-06T10:00:00Z"
+  },
+  {
+    "id": "cg_0007",
+    "band": "other",
+    "confidence": 0.72,
+    "reasons": [
+      { "text": "Name similarity 0.78", "score": 0.50, "strength": "moderate", "field": "name" },
+      { "text": "Address partial match", "score": 0.20, "strength": "weak", "field": "address" },
+      { "text": "VAT mismatch", "score": -0.15, "strength": "strong", "field": "vat" }
+    ],
+    "records": [
+      { "id": "crm-120", "source": "crm", "fields": { "name": "Sunrise Ltd", "vat": "GB987654321", "address": "789 High Street, Manchester", "country": "United Kingdom", "email": "hello@sunrise.co.uk", "phone": "+44 161 234 5678" } },
+      { "id": "erp-221", "source": "erp", "fields": { "name": "Sunrise Limited", "vat": "GB111222333", "address": "789 High St, Manchester", "country": "UK", "email": "info@sunrise.co.uk" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-07T08:15:00Z"
+  },
+  {
+    "id": "cg_0008",
+    "band": "high",
+    "confidence": 0.87,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.70, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.88", "score": 0.15, "strength": "moderate", "field": "name" },
+      { "text": "Country match", "score": 0.02, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-125", "source": "crm", "fields": { "name": "TechVentures GmbH", "vat": "DE123456789", "address": "Friedrichstraße 123, Berlin", "country": "Germany", "email": "kontakt@techventures.de", "phone": "+49 30 12345678" } },
+      { "id": "erp-226", "source": "erp", "fields": { "name": "TechVentures", "vat": "DE123456789", "address": "Friedrichstr. 123", "country": "Germany", "email": "info@techventures.de" } },
+      { "id": "fin-327", "source": "finance", "fields": { "name": "TechVentures GmbH", "vat": "DE123456789", "country": "Germany", "email": "buchhaltung@techventures.de" } },
+      { "id": "sup-428", "source": "support", "fields": { "name": "TechVentures", "vat": "DE123456789", "country": "Germany", "email": "support@techventures.de" } },
+      { "id": "rik-DE-123456", "source": "registry", "fields": { "name": "TechVentures Gesellschaft mit beschränkter Haftung", "registry_code": "DE-123456", "vat": "DE123456789", "address": "Friedrichstraße 123, 10117 Berlin", "country": "Germany", "email": "recht@techventures.de" } }
+    ],
+    "status": "confirmed",
+    "reviewer": "David Kim",
+    "reviewed_at": "2025-11-08T16:20:00Z",
+    "created_at": "2025-11-05T13:00:00Z"
+  },
+  {
+    "id": "cg_0009",
+    "band": "other",
+    "confidence": 0.68,
+    "reasons": [
+      { "text": "Name similarity 0.72", "score": 0.45, "strength": "moderate", "field": "name" },
+      { "text": "Address mismatch", "score": -0.20, "strength": "strong", "field": "address" },
+      { "text": "Country match", "score": 0.03, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-130", "source": "crm", "fields": { "name": "Global Solutions", "vat": "FR987654321", "address": "15 Rue de la Paix, Paris", "country": "France", "email": "contact@globalsol.fr", "phone": "+33 1 23 45 67 89" } },
+      { "id": "erp-231", "source": "erp", "fields": { "name": "Global Solutions SAS", "vat": "FR987654321", "address": "20 Avenue des Champs, Paris", "country": "France", "email": "info@globalsol.fr" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Lisa Anderson",
+    "reviewed_at": "2025-11-09T10:30:00Z",
+    "created_at": "2025-11-06T15:00:00Z"
+  },
+  {
+    "id": "cg_0010",
+    "band": "veryHigh",
+    "confidence": 0.94,
+    "reasons": [
+      { "text": "Registry code exact", "score": 0.75, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.15, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.96", "score": 0.04, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-135", "source": "crm", "fields": { "name": "Digital Innovations AS", "vat": "NO987654321", "address": "Karl Johans gate 1, Oslo", "country": "Norway", "email": "hei@digital.no", "phone": "+47 22 123 456" } },
+      { "id": "erp-236", "source": "erp", "fields": { "name": "Digital Innovations", "vat": "NO987654321", "address": "Karl Johans gt 1", "country": "Norway", "email": "info@digital.no" } },
+      { "id": "fin-337", "source": "finance", "fields": { "name": "Digital Innovations AS", "vat": "NO987654321", "country": "Norway", "email": "regnskap@digital.no" } },
+      { "id": "sup-438", "source": "support", "fields": { "name": "Digital Innovations", "vat": "NO987654321", "country": "Norway", "email": "support@digital.no" } },
+      { "id": "rik-NO-112233", "source": "registry", "fields": { "name": "Digital Innovations Aksjeselskap", "registry_code": "NO-112233", "vat": "NO987654321", "address": "Karl Johans gate 1, 0162 Oslo", "country": "Norway", "email": "juridisk@digital.no" } }
+    ],
+    "status": "confirmed",
+    "reviewer": "Tom Johnson",
+    "reviewed_at": "2025-11-10T11:45:00Z",
+    "created_at": "2025-11-07T09:00:00Z"
+  },
+  {
+    "id": "cg_0011",
+    "band": "high",
+    "confidence": 0.85,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.65, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.82", "score": 0.18, "strength": "moderate", "field": "name" },
+      { "text": "Phone mismatch", "score": -0.05, "strength": "weak", "field": "phone" }
+    ],
+    "records": [
+      { "id": "crm-140", "source": "crm", "fields": { "name": "Nordic Shipping", "vat": "FI987654321", "address": "Mannerheimintie 50, Helsinki", "country": "Finland", "email": "info@nordicship.fi", "phone": "+358 9 123 4567" } },
+      { "id": "erp-241", "source": "erp", "fields": { "name": "Nordic Shipping Oy", "vat": "FI987654321", "address": "Mannerheimintie 50", "country": "Finland", "email": "myynti@nordicship.fi", "phone": "+35891234567" } },
+      { "id": "fin-342", "source": "finance", "fields": { "name": "Nordic Shipping", "vat": "FI987654321", "country": "Finland", "email": "talous@nordicship.fi" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-08T14:00:00Z"
+  },
+  {
+    "id": "cg_0012",
+    "band": "other",
+    "confidence": 0.71,
+    "reasons": [
+      { "text": "Name similarity 0.75", "score": 0.50, "strength": "moderate", "field": "name" },
+      { "text": "VAT mismatch", "score": -0.25, "strength": "strong", "field": "vat" },
+      { "text": "Address partial match", "score": 0.15, "strength": "weak", "field": "address" }
+    ],
+    "records": [
+      { "id": "crm-145", "source": "crm", "fields": { "name": "Metro Logistics", "vat": "PL987654321", "address": "ul. Marszałkowska 1, Warsaw", "country": "Poland", "email": "kontakt@metro.pl", "phone": "+48 22 123 4567" } },
+      { "id": "erp-246", "source": "erp", "fields": { "name": "Metro Logistics Sp. z o.o.", "vat": "PL111222333", "address": "Marszałkowska 1", "country": "Poland", "email": "info@metro.pl" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Anna Kowalski",
+    "reviewed_at": "2025-11-11T13:20:00Z",
+    "created_at": "2025-11-09T10:30:00Z"
+  },
+  {
+    "id": "cg_0013",
+    "band": "veryHigh",
+    "confidence": 0.97,
+    "reasons": [
+      { "text": "Registry code exact match", "score": 0.82, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.12, "strength": "strong", "field": "vat" },
+      { "text": "Name exact match", "score": 0.03, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-150", "source": "crm", "fields": { "name": "Estonian Tech Solutions OÜ", "vat": "EE200000001", "address": "Harju maakond, Tallinn, Pärnu mnt 10", "country": "Estonia", "email": "info@estoniantech.ee", "phone": "+372 600 0001" } },
+      { "id": "erp-251", "source": "erp", "fields": { "name": "Estonian Tech Solutions", "vat": "EE200000001", "address": "Pärnu mnt 10, Tallinn", "country": "Estonia", "email": "sales@estoniantech.ee" } },
+      { "id": "fin-352", "source": "finance", "fields": { "name": "Estonian Tech Solutions OÜ", "vat": "EE200000001", "country": "Estonia", "email": "finance@estoniantech.ee" } },
+      { "id": "sup-453", "source": "support", "fields": { "name": "Estonian Tech Solutions", "vat": "EE200000001", "country": "Estonia", "email": "support@estoniantech.ee" } },
+      { "id": "rik-EE-200001", "source": "registry", "fields": { "name": "Estonian Tech Solutions OÜ", "registry_code": "EE-200001", "vat": "EE200000001", "address": "Harju maakond, Tallinn, Pärnu mnt 10, 10141", "country": "Estonia", "email": "legal@estoniantech.ee" } }
+    ],
+    "status": "confirmed",
+    "reviewer": "Maria Saar",
+    "reviewed_at": "2025-11-12T09:15:00Z",
+    "created_at": "2025-11-10T08:00:00Z"
+  },
+  {
+    "id": "cg_0014",
+    "band": "high",
+    "confidence": 0.86,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.70, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.84", "score": 0.14, "strength": "moderate", "field": "name" },
+      { "text": "Country match", "score": 0.02, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-155", "source": "crm", "fields": { "name": "Scandinavian Design AB", "vat": "SE123456789", "address": "Sveavägen 10, Stockholm", "country": "Sweden", "email": "info@scandesign.se", "phone": "+46 8 555 1234" } },
+      { "id": "erp-256", "source": "erp", "fields": { "name": "Scandinavian Design", "vat": "SE123456789", "address": "Sveavägen 10", "country": "Sweden", "email": "orders@scandesign.se" } },
+      { "id": "fin-357", "source": "finance", "fields": { "name": "Scandinavian Design AB", "vat": "SE123456789", "country": "Sweden", "email": "bokforing@scandesign.se" } },
+      { "id": "sup-458", "source": "support", "fields": { "name": "Scandinavian Design", "vat": "SE123456789", "country": "Sweden", "email": "hjalp@scandesign.se" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-11T11:00:00Z"
+  },
+  {
+    "id": "cg_0015",
+    "band": "other",
+    "confidence": 0.69,
+    "reasons": [
+      { "text": "Name similarity 0.70", "score": 0.45, "strength": "moderate", "field": "name" },
+      { "text": "VAT mismatch", "score": -0.20, "strength": "strong", "field": "vat" },
+      { "text": "Address different cities", "score": -0.10, "strength": "moderate", "field": "address" }
+    ],
+    "records": [
+      { "id": "crm-160", "source": "crm", "fields": { "name": "Baltic Trading", "vat": "LV987654321", "address": "Brīvības iela 1, Riga", "country": "Latvia", "email": "info@baltictrading.lv", "phone": "+371 67 123 456" } },
+      { "id": "erp-261", "source": "erp", "fields": { "name": "Baltic Trading SIA", "vat": "LV111222333", "address": "Elizabetes iela 5, Riga", "country": "Latvia", "email": "sales@baltictrading.lv" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Jānis Bērziņš",
+    "reviewed_at": "2025-11-13T14:50:00Z",
+    "created_at": "2025-11-12T16:00:00Z"
+  },
+  {
+    "id": "cg_0016",
+    "band": "veryHigh",
+    "confidence": 0.93,
+    "reasons": [
+      { "text": "Registry code exact", "score": 0.73, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.16, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.95", "score": 0.04, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-165", "source": "crm", "fields": { "name": "Finnish Manufacturing Oy", "vat": "FI123456789", "address": "Mannerheimintie 100, Helsinki", "country": "Finland", "email": "info@finnishmfg.fi", "phone": "+358 9 555 1234" } },
+      { "id": "erp-266", "source": "erp", "fields": { "name": "Finnish Manufacturing", "vat": "FI123456789", "address": "Mannerheimintie 100", "country": "Finland", "email": "myynti@finnishmfg.fi" } },
+      { "id": "fin-367", "source": "finance", "fields": { "name": "Finnish Manufacturing Oy", "vat": "FI123456789", "country": "Finland", "email": "talous@finnishmfg.fi" } },
+      { "id": "sup-468", "source": "support", "fields": { "name": "Finnish Manufacturing", "vat": "FI123456789", "country": "Finland", "email": "tuki@finnishmfg.fi" } },
+      { "id": "rik-FI-223344", "source": "registry", "fields": { "name": "Finnish Manufacturing Osakeyhtiö", "registry_code": "FI-223344", "vat": "FI123456789", "address": "Mannerheimintie 100, 00100 Helsinki", "country": "Finland", "email": "juridinen@finnishmfg.fi" } }
+    ],
+    "status": "suggested",
+    "created_at": "2025-11-13T10:00:00Z"
+  },
+  {
+    "id": "cg_0017",
+    "band": "high",
+    "confidence": 0.84,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.68, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.80", "score": 0.14, "strength": "moderate", "field": "name" },
+      { "text": "Email domain match", "score": 0.02, "strength": "weak", "field": "email" }
+    ],
+    "records": [
+      { "id": "crm-170", "source": "crm", "fields": { "name": "Danish Consulting ApS", "vat": "DK987654321", "address": "Strøget 1, Copenhagen", "country": "Denmark", "email": "info@danishconsult.dk", "phone": "+45 33 123 456" } },
+      { "id": "erp-271", "source": "erp", "fields": { "name": "Danish Consulting", "vat": "DK987654321", "address": "Strøget 1", "country": "Denmark", "email": "kontakt@danishconsult.dk" } },
+      { "id": "fin-372", "source": "finance", "fields": { "name": "Danish Consulting ApS", "vat": "DK987654321", "country": "Denmark", "email": "regnskab@danishconsult.dk" } },
+      { "id": "sup-473", "source": "support", "fields": { "name": "Danish Consulting", "vat": "DK987654321", "country": "Denmark", "email": "support@danishconsult.dk" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-14T09:30:00Z"
+  },
+  {
+    "id": "cg_0018",
+    "band": "other",
+    "confidence": 0.74,
+    "reasons": [
+      { "text": "Name similarity 0.77", "score": 0.50, "strength": "moderate", "field": "name" },
+      { "text": "Address mismatch", "score": -0.15, "strength": "strong", "field": "address" },
+      { "text": "Country match", "score": 0.03, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-175", "source": "crm", "fields": { "name": "Iberian Services", "vat": "ES123456789", "address": "Gran Vía 50, Madrid", "country": "Spain", "email": "info@iberian.es", "phone": "+34 91 123 4567" } },
+      { "id": "erp-276", "source": "erp", "fields": { "name": "Iberian Services SL", "vat": "ES123456789", "address": "Paseo de la Castellana 100, Madrid", "country": "Spain", "email": "ventas@iberian.es" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Carlos Rodriguez",
+    "reviewed_at": "2025-11-15T12:00:00Z",
+    "created_at": "2025-11-14T13:00:00Z"
+  },
+  {
+    "id": "cg_0019",
+    "band": "veryHigh",
+    "confidence": 0.98,
+    "reasons": [
+      { "text": "Registry code exact match", "score": 0.85, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.10, "strength": "strong", "field": "vat" },
+      { "text": "Name exact match", "score": 0.03, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-180", "source": "crm", "fields": { "name": "Baltic Sea Shipping OÜ", "vat": "EE300000001", "address": "Sadama 25, Tallinn", "country": "Estonia", "email": "info@balticship.ee", "phone": "+372 600 2001" } },
+      { "id": "erp-281", "source": "erp", "fields": { "name": "Baltic Sea Shipping", "vat": "EE300000001", "address": "Sadama 25", "country": "Estonia", "email": "sales@balticship.ee" } },
+      { "id": "fin-382", "source": "finance", "fields": { "name": "Baltic Sea Shipping OÜ", "vat": "EE300000001", "country": "Estonia", "email": "finance@balticship.ee" } },
+      { "id": "sup-483", "source": "support", "fields": { "name": "Baltic Sea Shipping", "vat": "EE300000001", "country": "Estonia", "email": "support@balticship.ee" } },
+      { "id": "rik-EE-300001", "source": "registry", "fields": { "name": "Baltic Sea Shipping OÜ", "registry_code": "EE-300001", "vat": "EE300000001", "address": "Sadama 25, 10111 Tallinn", "country": "Estonia", "email": "legal@balticship.ee" } }
+    ],
+    "status": "confirmed",
+    "reviewer": "Toomas Kask",
+    "reviewed_at": "2025-11-16T10:30:00Z",
+    "created_at": "2025-11-15T07:00:00Z"
+  },
+  {
+    "id": "cg_0020",
+    "band": "high",
+    "confidence": 0.88,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.72, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.86", "score": 0.14, "strength": "moderate", "field": "name" },
+      { "text": "Country match", "score": 0.02, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-185", "source": "crm", "fields": { "name": "Nordic Finance Group AB", "vat": "SE987654321", "address": "Kungsgatan 20, Stockholm", "country": "Sweden", "email": "info@nordicfinance.se", "phone": "+46 8 777 1234" } },
+      { "id": "erp-286", "source": "erp", "fields": { "name": "Nordic Finance Group", "vat": "SE987654321", "address": "Kungsgatan 20", "country": "Sweden", "email": "kontakt@nordicfinance.se" } },
+      { "id": "fin-387", "source": "finance", "fields": { "name": "Nordic Finance Group AB", "vat": "SE987654321", "country": "Sweden", "email": "ekonomi@nordicfinance.se" } },
+      { "id": "sup-488", "source": "support", "fields": { "name": "Nordic Finance Group", "vat": "SE987654321", "country": "Sweden", "email": "hjalp@nordicfinance.se" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-16T14:00:00Z"
+  },
+  {
+    "id": "cg_0021",
+    "band": "other",
+    "confidence": 0.73,
+    "reasons": [
+      { "text": "Name similarity 0.74", "score": 0.48, "strength": "moderate", "field": "name" },
+      { "text": "VAT mismatch", "score": -0.22, "strength": "strong", "field": "vat" },
+      { "text": "Address different", "score": -0.10, "strength": "moderate", "field": "address" }
+    ],
+    "records": [
+      { "id": "crm-190", "source": "crm", "fields": { "name": "Central European Trade", "vat": "CZ987654321", "address": "Václavské náměstí 1, Prague", "country": "Czech Republic", "email": "info@centraleurope.cz", "phone": "+420 2 123 4567" } },
+      { "id": "erp-291", "source": "erp", "fields": { "name": "Central European Trade s.r.o.", "vat": "CZ111222333", "address": "Na Příkopě 1, Prague", "country": "Czech Republic", "email": "obchod@centraleurope.cz" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Petr Novák",
+    "reviewed_at": "2025-11-17T11:15:00Z",
+    "created_at": "2025-11-16T15:30:00Z"
+  },
+  {
+    "id": "cg_0022",
+    "band": "veryHigh",
+    "confidence": 0.95,
+    "reasons": [
+      { "text": "Registry code exact", "score": 0.78, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.13, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.94", "score": 0.04, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-195", "source": "crm", "fields": { "name": "Estonian Retail Chain OÜ", "vat": "EE400000001", "address": "Viru väljak 4, Tallinn", "country": "Estonia", "email": "info@estonianretail.ee", "phone": "+372 600 3001" } },
+      { "id": "erp-296", "source": "erp", "fields": { "name": "Estonian Retail Chain", "vat": "EE400000001", "address": "Viru väljak 4", "country": "Estonia", "email": "myynti@estonianretail.ee" } },
+      { "id": "fin-397", "source": "finance", "fields": { "name": "Estonian Retail Chain OÜ", "vat": "EE400000001", "country": "Estonia", "email": "finance@estonianretail.ee" } },
+      { "id": "sup-498", "source": "support", "fields": { "name": "Estonian Retail Chain", "vat": "EE400000001", "country": "Estonia", "email": "klienditugi@estonianretail.ee" } },
+      { "id": "rik-EE-400001", "source": "registry", "fields": { "name": "Estonian Retail Chain OÜ", "registry_code": "EE-400001", "vat": "EE400000001", "address": "Viru väljak 4, 10111 Tallinn", "country": "Estonia", "email": "legal@estonianretail.ee" } }
+    ],
+    "status": "suggested",
+    "created_at": "2025-11-17T08:00:00Z"
+  },
+  {
+    "id": "cg_0023",
+    "band": "high",
+    "confidence": 0.87,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.69, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.83", "score": 0.16, "strength": "moderate", "field": "name" },
+      { "text": "Country match", "score": 0.02, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-200", "source": "crm", "fields": { "name": "Scandinavian Logistics AB", "vat": "SE555666777", "address": "Drottninggatan 80, Stockholm", "country": "Sweden", "email": "info@scandlog.se", "phone": "+46 8 888 1234" } },
+      { "id": "erp-301", "source": "erp", "fields": { "name": "Scandinavian Logistics", "vat": "SE555666777", "address": "Drottninggatan 80", "country": "Sweden", "email": "orders@scandlog.se" } },
+      { "id": "fin-402", "source": "finance", "fields": { "name": "Scandinavian Logistics AB", "vat": "SE555666777", "country": "Sweden", "email": "ekonomi@scandlog.se" } },
+      { "id": "sup-503", "source": "support", "fields": { "name": "Scandinavian Logistics", "vat": "SE555666777", "country": "Sweden", "email": "support@scandlog.se" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-18T10:00:00Z"
+  },
+  {
+    "id": "cg_0024",
+    "band": "other",
+    "confidence": 0.70,
+    "reasons": [
+      { "text": "Name similarity 0.72", "score": 0.46, "strength": "moderate", "field": "name" },
+      { "text": "VAT mismatch", "score": -0.18, "strength": "strong", "field": "vat" },
+      { "text": "Address partial match", "score": 0.12, "strength": "weak", "field": "address" }
+    ],
+    "records": [
+      { "id": "crm-205", "source": "crm", "fields": { "name": "Mediterranean Trading", "vat": "IT987654321", "address": "Via Roma 10, Milan", "country": "Italy", "email": "info@medtrade.it", "phone": "+39 02 1234 5678" } },
+      { "id": "erp-306", "source": "erp", "fields": { "name": "Mediterranean Trading SRL", "vat": "IT111222333", "address": "Via Garibaldi 5, Milan", "country": "Italy", "email": "vendite@medtrade.it" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Marco Rossi",
+    "reviewed_at": "2025-11-19T09:30:00Z",
+    "created_at": "2025-11-18T11:30:00Z"
+  },
+  {
+    "id": "cg_0025",
+    "band": "veryHigh",
+    "confidence": 0.96,
+    "reasons": [
+      { "text": "Registry code exact match", "score": 0.80, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.13, "strength": "strong", "field": "vat" },
+      { "text": "Name exact match", "score": 0.03, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-210", "source": "crm", "fields": { "name": "Tallinn Tech Hub OÜ", "vat": "EE500000001", "address": "Telliskivi 60, Tallinn", "country": "Estonia", "email": "info@tallinntech.ee", "phone": "+372 600 4001" } },
+      { "id": "erp-311", "source": "erp", "fields": { "name": "Tallinn Tech Hub", "vat": "EE500000001", "address": "Telliskivi 60", "country": "Estonia", "email": "sales@tallinntech.ee" } },
+      { "id": "fin-412", "source": "finance", "fields": { "name": "Tallinn Tech Hub OÜ", "vat": "EE500000001", "country": "Estonia", "email": "finance@tallinntech.ee" } },
+      { "id": "sup-513", "source": "support", "fields": { "name": "Tallinn Tech Hub", "vat": "EE500000001", "country": "Estonia", "email": "support@tallinntech.ee" } },
+      { "id": "rik-EE-500001", "source": "registry", "fields": { "name": "Tallinn Tech Hub OÜ", "registry_code": "EE-500001", "vat": "EE500000001", "address": "Telliskivi 60, 10412 Tallinn", "country": "Estonia", "email": "legal@tallinntech.ee" } }
+    ],
+    "status": "confirmed",
+    "reviewer": "Kadri Tamm",
+    "reviewed_at": "2025-11-20T14:20:00Z",
+    "created_at": "2025-11-19T08:00:00Z"
+  },
+  {
+    "id": "cg_0026",
+    "band": "high",
+    "confidence": 0.85,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.67, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.81", "score": 0.15, "strength": "moderate", "field": "name" },
+      { "text": "Country match", "score": 0.03, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-215", "source": "crm", "fields": { "name": "Nordic Energy Solutions AS", "vat": "NO123456789", "address": "Karl Johans gate 50, Oslo", "country": "Norway", "email": "info@nordicenergy.no", "phone": "+47 22 555 1234" } },
+      { "id": "erp-316", "source": "erp", "fields": { "name": "Nordic Energy Solutions", "vat": "NO123456789", "address": "Karl Johans gt 50", "country": "Norway", "email": "sales@nordicenergy.no" } },
+      { "id": "fin-417", "source": "finance", "fields": { "name": "Nordic Energy Solutions AS", "vat": "NO123456789", "country": "Norway", "email": "regnskap@nordicenergy.no" } },
+      { "id": "sup-518", "source": "support", "fields": { "name": "Nordic Energy Solutions", "vat": "NO123456789", "country": "Norway", "email": "support@nordicenergy.no" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-20T12:00:00Z"
+  },
+  {
+    "id": "cg_0027",
+    "band": "other",
+    "confidence": 0.75,
+    "reasons": [
+      { "text": "Name similarity 0.76", "score": 0.49, "strength": "moderate", "field": "name" },
+      { "text": "VAT mismatch", "score": -0.20, "strength": "strong", "field": "vat" },
+      { "text": "Address different", "score": -0.12, "strength": "moderate", "field": "address" }
+    ],
+    "records": [
+      { "id": "crm-220", "source": "crm", "fields": { "name": "Alpine Services", "vat": "AT987654321", "address": "Mariahilfer Straße 1, Vienna", "country": "Austria", "email": "info@alpineservices.at", "phone": "+43 1 123 4567" } },
+      { "id": "erp-321", "source": "erp", "fields": { "name": "Alpine Services GmbH", "vat": "AT111222333", "address": "Ringstraße 1, Vienna", "country": "Austria", "email": "verkauf@alpineservices.at" } }
+    ],
+    "status": "rejected",
+    "reviewer": "Stefan Müller",
+    "reviewed_at": "2025-11-21T10:45:00Z",
+    "created_at": "2025-11-20T15:00:00Z"
+  },
+  {
+    "id": "cg_0028",
+    "band": "veryHigh",
+    "confidence": 0.94,
+    "reasons": [
+      { "text": "Registry code exact", "score": 0.76, "strength": "strong", "field": "registry_code" },
+      { "text": "VAT exact match", "score": 0.14, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.93", "score": 0.04, "strength": "strong", "field": "name" }
+    ],
+    "records": [
+      { "id": "crm-225", "source": "crm", "fields": { "name": "Estonian Green Energy OÜ", "vat": "EE600000001", "address": "Pärnu mnt 158, Tallinn", "country": "Estonia", "email": "info@estgreen.ee", "phone": "+372 600 5001" } },
+      { "id": "erp-326", "source": "erp", "fields": { "name": "Estonian Green Energy", "vat": "EE600000001", "address": "Pärnu mnt 158", "country": "Estonia", "email": "myynti@estgreen.ee" } },
+      { "id": "fin-427", "source": "finance", "fields": { "name": "Estonian Green Energy OÜ", "vat": "EE600000001", "country": "Estonia", "email": "finance@estgreen.ee" } },
+      { "id": "sup-528", "source": "support", "fields": { "name": "Estonian Green Energy", "vat": "EE600000001", "country": "Estonia", "email": "klienditugi@estgreen.ee" } },
+      { "id": "rik-EE-600001", "source": "registry", "fields": { "name": "Estonian Green Energy OÜ", "registry_code": "EE-600001", "vat": "EE600000001", "address": "Pärnu mnt 158, 11314 Tallinn", "country": "Estonia", "email": "legal@estgreen.ee" } }
+    ],
+    "status": "suggested",
+    "created_at": "2025-11-21T09:00:00Z"
+  },
+  {
+    "id": "cg_0029",
+    "band": "high",
+    "confidence": 0.86,
+    "reasons": [
+      { "text": "VAT exact match", "score": 0.71, "strength": "strong", "field": "vat" },
+      { "text": "Name similarity 0.85", "score": 0.13, "strength": "moderate", "field": "name" },
+      { "text": "Country match", "score": 0.02, "strength": "moderate", "field": "country" }
+    ],
+    "records": [
+      { "id": "crm-230", "source": "crm", "fields": { "name": "Scandinavian Health Care AB", "vat": "SE777888999", "address": "Storgatan 10, Stockholm", "country": "Sweden", "email": "info@scandhealth.se", "phone": "+46 8 999 1234" } },
+      { "id": "erp-331", "source": "erp", "fields": { "name": "Scandinavian Health Care", "vat": "SE777888999", "address": "Storgatan 10", "country": "Sweden", "email": "kontakt@scandhealth.se" } },
+      { "id": "fin-432", "source": "finance", "fields": { "name": "Scandinavian Health Care AB", "vat": "SE777888999", "country": "Sweden", "email": "ekonomi@scandhealth.se" } },
+      { "id": "sup-533", "source": "support", "fields": { "name": "Scandinavian Health Care", "vat": "SE777888999", "country": "Sweden", "email": "hjalp@scandhealth.se" } }
+    ],
+    "status": "needs_review",
+    "created_at": "2025-11-22T11:00:00Z"
+  },
+  {
+    "id": "cg_0030",
+    "band": "conflicted",
+    "confidence": 0.82,
+    "reasons": [
+      { "text": "Name similarity 0.79", "score": 0.52, "strength": "moderate", "field": "name" },
+      { "text": "VAT conflicting values", "score": -0.30, "strength": "strong", "field": "vat" },
+      { "text": "Address mismatch", "score": -0.15, "strength": "moderate", "field": "address" }
+    ],
+    "records": [
+      { "id": "crm-235", "source": "crm", "fields": { "name": "Baltic Trading Partners", "vat": "EE700000001", "address": "Narva mnt 5, Tallinn", "country": "Estonia", "email": "info@baltictrade.ee", "phone": "+372 600 6001" } },
+      { "id": "erp-336", "source": "erp", "fields": { "name": "Baltic Trading Partners OÜ", "vat": "EE700000002", "address": "Tartu mnt 25, Tallinn", "country": "Estonia", "email": "sales@baltictrade.ee" } },
+      { "id": "fin-437", "source": "finance", "fields": { "name": "Baltic Trading Partners", "vat": "EE700000001", "country": "Estonia", "email": "finance@baltictrade.ee" } },
+      { "id": "sup-538", "source": "support", "fields": { "name": "Baltic Trading Partners", "vat": "EE700000001", "country": "Estonia", "email": "support@baltictrade.ee" } }
+    ],
+    "status": "conflicted",
+    "created_at": "2025-11-23T10:00:00Z"
+  }
+]
+
+
